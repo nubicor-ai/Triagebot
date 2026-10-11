@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can You Beat ChatGPT at Triage? | Nubicor</title>
+<meta name="description" content="20 fictional ED cases. Triage them, then compare your answers with ChatGPT on the same cases.">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1E1033;--card:#2D1B4E;--line:#3a2561;--lilac:#C9B6F2;--soft:#B09CD6;--coral:#FF7A66;--white:#F6F1FF;
+--red:#FF5A5F;--orange:#FF9F43;--yellow:#F6D55C;--green:#5BD9A0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--white);font-family:'Poppins',system-ui,sans-serif;min-height:100vh;display:flex;justify-content:center}
+.wrap{width:100%;max-width:520px;padding:20px 20px 40px}
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--coral)}
+.handle{color:var(--lilac);font-size:14px;font-weight:500}
+.tag{color:var(--coral);font-weight:700;letter-spacing:.18em;font-size:12px;margin-bottom:10px}
+h1{font-size:34px;line-height:1.15;font-weight:700;margin-bottom:14px}
+h1 span{color:var(--lilac)}
+p.lead{color:var(--lilac);font-size:16px;line-height:1.55;margin-bottom:22px}
+.legend{border-top:1px solid var(--line);padding-top:16px;margin-bottom:22px}
+.legend div{display:flex;align-items:center;gap:12px;font-size:14px;margin:9px 0;color:var(--white)}
+.legend i{width:14px;height:14px;border-radius:50%;flex:none}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font:600 17px 'Poppins',sans-serif;cursor:pointer;background:var(--lilac);color:#1E1033}
+.btn.alt{background:transparent;border:2px solid var(--lilac);color:var(--lilac);margin-top:12px}
+.small{color:var(--soft);font-size:12px;line-height:1.5;margin-top:18px}
+.prog{display:flex;justify-content:space-between;color:var(--lilac);font-size:14px;font-weight:500;margin-bottom:8px}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-bottom:22px;overflow:hidden}
+.bar b{display:block;height:100%;background:var(--lilac);width:0;transition:width .3s}
+.pt{font-size:13px;color:var(--lilac);font-weight:700;letter-spacing:.12em;margin-bottom:8px}
+.cc{font-size:22px;font-weight:600;line-height:1.35;margin-bottom:16px}
+.vit{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px}
+.vit div{background:var(--card);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--lilac)}
+.vit b{display:block;color:var(--white);font-size:15px;font-weight:600}
+.q{font-size:14px;color:var(--soft);margin-bottom:10px}
+.opts button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:14px;padding:14px 16px;margin-bottom:10px;font:600 16px 'Poppins',sans-serif;cursor:pointer;color:#1E1033}
+.opts small{font-weight:500;font-size:12px;opacity:.8;display:block}
+.opts button[data-l="1"]{background:var(--red)}
+.opts button[data-l="2"]{background:var(--yellow)}
+.opts button[data-l="3"]{background:var(--green)}
+.opts button:disabled{opacity:.35;cursor:default}
+.opts button.pick{opacity:1;outline:3px solid var(--white)}
+.opts button.right{opacity:1;outline:3px solid var(--white)}
+.fb{background:var(--card);border-radius:16px;padding:16px;margin:6px 0 16px;font-size:14px;line-height:1.55}
+.fb .row{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:13px;color:var(--lilac)}
+.fb .row b{color:var(--white)}
+.fb .ok{color:var(--green);font-weight:700}
+.fb .no{color:var(--coral);font-weight:700}
+.big{font-size:84px;font-weight:700;line-height:1;color:var(--lilac)}
+.vs{display:flex;gap:14px;margin:18px 0}
+.vs div{flex:1;background:var(--card);border-radius:16px;padding:16px}
+.vs span{font-size:13px;color:var(--lilac)}
+.vs b{display:block;font-size:40px;line-height:1.2}
+.pat{margin:16px 0 4px;border-top:1px solid var(--line);padding-top:14px;font-size:14px;color:var(--lilac);line-height:1.6}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><div class="brand"><span class="dot"></span>nubicor</div><div class="handle">@nubicor.ai</div></div>
+
+  <section id="start">
+    <div class="tag">TRIAGE CHALLENGE</div>
+    <h1>Can you beat <span>ChatGPT</span> at triage?</h1>
+    <p class="lead">20 fictional ED cases. Pick a triage level for each, then see how you score against ChatGPT, which answered the same cases.</p>
+    <div class="legend">
+      <div><i style="background:var(--red)"></i>Red: emergency, needs treatment now</div>
+      <div><i style="background:var(--yellow)"></i>Yellow: urgent but stable, can wait a short time</div>
+      <div><i style="background:var(--green)"></i>Green: non-urgent</div>
+    </div>
+    <button class="btn" id="go">Start</button>
+    <p class="small">Education only, not medical advice. All cases are invented. ChatGPT answered these 20 cases once, on 11 October 2026. Results can vary between runs and versions. The answer key is the author's clinical judgement, not a validated standard, and a few cases are borderline.</p>
+  </section>
+
+  <section id="play" class="hide">
+    <div class="prog"><span id="n">Case 1 / 20</span><span id="sc">You 0 · ChatGPT 0</span></div>
+    <div class="bar"><b id="b"></b></div>
+    <div class="pt" id="pt"></div>
+    <div class="cc" id="cc"></div>
+    <div class="vit" id="vit"></div>
+    <div class="q" id="q">Your triage level:</div>
+    <div class="opts" id="opts">
+      <button data-l="1">Red <small>Emergency</small></button>
+      <button data-l="2">Yellow <small>Urgent</small></button>
+      <button data-l="3">Green <small>Non-urgent</small></button>
+    </div>
+    <div class="fb hide" id="fb"></div>
+    <button class="btn hide" id="next">Next case</button>
+  </section>
+
+  <section id="end" class="hide">
+    <div class="tag">RESULT</div>
+    <div class="big" id="big"></div>
+    <div class="vs">
+      <div><span>You</span><b id="you"></b></div>
+      <div><span>ChatGPT</span><b id="bot"></b></div>
+    </div>
+    <p class="lead" id="verdict"></p>
+    <div class="pat" id="pat"></div>
+    <textarea id="sharebox" class="hide" readonly rows="3" style="width:100%;margin-bottom:12px;border-radius:12px;border:2px solid var(--lilac);background:var(--card);color:var(--white);font:500 15px Poppins,sans-serif;padding:12px"></textarea>
+    <button class="btn" id="share">Copy my score</button>
+    <button class="btn alt" id="again">Play again</button>
+    <p class="small">Real triage depends on local protocols and a clinician's judgement. Follow @nubicor.ai for more health-AI teardowns.</p>
+  </section>
+</div>
+
+<script>
+var NAMES={1:'Red',2:'Yellow',3:'Green'};
+// l = answer key level, b = ChatGPT answer (single run, 11 Oct 2026)
+var CASES=[
+{p:"58-year-old man",c:"Chest pain for 40 minutes, spreading to the left arm, sweating.",v:["BP 100/60", "HR 98", "SpO2 96%", "RR 20"],l:1,b:1,r:"Suspected acute coronary syndrome with ongoing chest pain and diaphoresis.",w:"Possible heart attack. Needs an ECG within minutes. Red."},
+{p:"24-year-old woman",c:"Mild headache for 3 days. No other symptoms.",v:["BP 112/70", "HR 80", "SpO2 99%", "Temp 37.1\u00b0C"],l:3,b:3,r:"Mild headache for 3 days without red flags or abnormal vital signs.",w:"No red flags and normal vitals. Non-urgent."},
+{p:"3-year-old girl",c:"Fever for 2 days. Drinking well, playing in the waiting area.",v:["Temp 38.4\u00b0C", "HR 120", "SpO2 99%", "RR 24"],l:3,b:3,r:"Well-appearing child, drinking and playing with age-appropriate vital signs.",w:"Well-appearing child, normal behaviour, hydrated. Non-urgent."},
+{p:"65-year-old man",c:"Sudden severe tearing pain in the back. Looks pale.",v:["BP right arm 190/110", "BP left arm 140/80", "HR 104", "SpO2 97%"],l:1,b:1,r:"Suspected aortic dissection with sudden tearing pain and unequal arm blood pressures.",w:"Sudden tearing pain with a blood pressure difference between arms suggests aortic dissection."},
+{p:"30-year-old man",c:"Twisted ankle while playing. Visible deformity, cannot bear weight. Foot is warm with a good pulse.",v:["BP 124/80", "HR 78", "SpO2 99%", "Pain 8/10"],l:2,b:2,r:"Ankle deformity with severe pain, but distal perfusion is preserved.",w:"Likely fracture, but circulation is fine. Needs an urgent X-ray and pain relief. Yellow."},
+{p:"45-year-old man",c:"Found drowsy after possible pesticide ingestion. Drooling, small pupils.",v:["HR 50", "RR 28", "SpO2 88%", "GCS 11"],l:1,b:1,r:"Suspected organophosphate poisoning with hypoxemia, bradycardia, and depressed consciousness.",w:"Looks like organophosphate poisoning with low oxygen and a slow pulse. Needs airway support now."},
+{p:"28-year-old woman",c:"Missed period 8 weeks ago. Lower abdominal pain, feels dizzy.",v:["BP 90/55", "HR 118", "SpO2 98%", "Looks pale"],l:1,b:1,r:"Suspected ruptured ectopic pregnancy with hypotension, tachycardia, and pallor.",w:"Low blood pressure and fast pulse in a woman of childbearing age: treat as a ruptured ectopic pregnancy until proven otherwise."},
+{p:"72-year-old woman",c:"Fell at home and hit her head. Takes warfarin. Now has a headache.",v:["GCS 15", "BP 150/86", "HR 84", "SpO2 97%"],l:2,b:1,r:"Head injury on warfarin with headache and risk of intracranial hemorrhage.",w:"Head injury on a blood thinner can bleed later even when she looks well. She needs a CT soon. The answer key says Yellow, but many protocols would say Red, so this one is borderline."},
+{p:"19-year-old man",c:"Sore throat and fever for 2 days. Swallowing fine, no drooling.",v:["Temp 38.0\u00b0C", "HR 90", "SpO2 99%", "RR 16"],l:3,b:3,r:"Uncomplicated sore throat with stable vital signs and normal swallowing.",w:"Likely simple throat infection. Non-urgent."},
+{p:"50-year-old woman",c:"Known asthma. Cannot finish a sentence, using neck muscles to breathe.",v:["RR 32", "SpO2 89%", "HR 128", "Speaks single words"],l:1,b:1,r:"Severe asthma exacerbation with hypoxemia, accessory muscle use, and inability to speak in sentences.",w:"Severe asthma attack with low oxygen. Red."},
+{p:"35-year-old man",c:"Snakebite on the right foot 1 hour ago. Local swelling only.",v:["BP 126/80", "HR 92", "SpO2 98%", "No bleeding"],l:2,b:2,r:"Snakebite with local swelling requiring urgent assessment and monitoring for envenomation.",w:"Vitals are normal now, but venom effects can appear late. Needs close observation and an early anti-venom decision. Some EDs would go straight to Red, so this one is borderline."},
+{p:"6-month-old baby",c:"Fever, very sleepy, poor feeding, new rash that does not fade on pressing.",v:["Temp 39.5\u00b0C", "HR 180", "SpO2 95%", "Limp"],l:1,b:1,r:"Suspected sepsis or meningococcal infection with lethargy, poor feeding, and a non-blanching rash.",w:"Fever with a non-blanching rash in a lethargic infant is a medical emergency (possible meningococcal sepsis)."},
+{p:"22-year-old woman",c:"Mild lower belly cramps with her period. Walking and talking normally.",v:["BP 110/70", "HR 82", "SpO2 99%", "Pain 3/10"],l:3,b:3,r:"Mild menstrual cramps with normal activity and stable vital signs.",w:"Typical period pain with normal vitals. Non-urgent."},
+{p:"55-year-old man",c:"Diabetic. Vomiting, deep fast breathing, drowsy.",v:["Glucose 480", "RR 30", "HR 120", "BP 100/60"],l:1,b:1,r:"Suspected diabetic ketoacidosis with altered consciousness and deep, rapid breathing.",w:"Likely diabetic ketoacidosis with drowsiness. Red."},
+{p:"80-year-old man",c:"Sudden left-sided weakness and slurred speech, started 1 hour ago.",v:["BP 170/90", "HR 88", "SpO2 96%", "Face droop"],l:1,b:1,r:"Acute stroke within the treatment window requiring immediate stroke assessment.",w:"Stroke inside the treatment window. Time matters."},
+{p:"32-year-old man",c:"Bike accident, helmet on. Scraped arms, walking, neck pain-free.",v:["BP 128/82", "HR 88", "SpO2 99%", "GCS 15"],l:2,b:3,r:"Minor abrasions with normal consciousness, stable vital signs, and no reported neck pain.",w:"Looks well, but the mechanism of injury still needs a proper check. Yellow."},
+{p:"26-year-old woman",c:"Anxious, says she cannot breathe, tingling in both hands.",v:["RR 30", "SpO2 99%", "HR 108", "BP 118/74"],l:2,b:2,r:"Possible anxiety-related hyperventilation, but serious causes of breathlessness must first be excluded.",w:"Normal oxygen and young age, but serious causes still need to be excluded. Yellow."},
+{p:"60-year-old man",c:"Fever and cough for 5 days. Feels very weak.",v:["RR 26", "SpO2 91%", "HR 110", "BP 100/60"],l:1,b:1,r:"Suspected severe respiratory infection with hypoxemia, tachypnea, and borderline blood pressure.",w:"Pneumonia with early signs of sepsis: fast breathing, low oxygen, low blood pressure."},
+{p:"14-year-old boy",c:"Scorpion sting 2 hours ago. Sweating heavily, cold hands and feet.",v:["HR 140", "RR 32", "SpO2 95%", "BP 90/60"],l:1,b:1,r:"Suspected severe scorpion envenomation with autonomic instability and hypotension.",w:"Scorpion envenomation with signs of cardiovascular effect. Needs urgent treatment. Red."},
+{p:"38-year-old woman",c:"Found collapsed. Not responding, no pulse.",v:["No pulse", "Not breathing", "GCS 3", "SpO2 unrecordable"],l:1,b:1,r:"Cardiac arrest requiring immediate CPR and resuscitation.",w:"Cardiac arrest. Red. Start CPR."}
+];
+var $=function(i){return document.getElementById(i)};
+var order,idx,you,bot,missU,missB;
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function show(id){['start','play','end'].forEach(function(s){$(s).classList.toggle('hide',s!==id)});window.scrollTo(0,0)}
+function start(){order=shuffle(CASES.slice());idx=0;you=0;bot=0;missU={under:0,over:0};missB={under:0,over:0};show('play');render()}
+function render(){
+  var c=order[idx];
+  $('n').textContent='Case '+(idx+1)+' / 20';
+  $('sc').textContent='You '+you+' · ChatGPT '+bot;
+  $('b').style.width=(idx/20*100)+'%';
+  $('pt').textContent=c.p.toUpperCase();
+  $('cc').textContent=c.c;
+  $('vit').innerHTML=c.v.map(function(x){var s=x.split(' ');var last=s.pop();var lab=s.join(' ');
+    if(!lab||!/[0-9]/.test(last)){return '<div><b>'+x+'</b></div>'}return '<div>'+lab+'<b>'+last+'</b></div>'}).join('');
+  var bs=document.querySelectorAll('#opts button');
+  for(var i=0;i<bs.length;i++){bs[i].disabled=false;bs[i].className=''}
+  $('q').classList.remove('hide');
+  $('fb').classList.add('hide');$('next').classList.add('hide');
+  window.scrollTo(0,0);
+}
+function pick(l){
+  var c=order[idx];
+  var bs=document.querySelectorAll('#opts button');
+  for(var i=0;i<bs.length;i++){bs[i].disabled=true;var bl=+bs[i].getAttribute('data-l');
+    if(bl===l)bs[i].classList.add('pick');if(bl===c.l)bs[i].classList.add('right')}
+  var uok=l===c.l,bok=c.b===c.l;
+  if(uok)you++;else{if(l>c.l)missU.under++;else missU.over++}
+  if(bok)bot++;else{if(c.b>c.l)missB.under++;else missB.over++}
+  $('sc').textContent='You '+you+' · ChatGPT '+bot;
+  $('fb').innerHTML=
+    '<div class="row"><span>You: <b>'+NAMES[l]+'</b> <span class="'+(uok?'ok':'no')+'">'+(uok?'✓':'✗')+'</span></span>'+
+    '<span>ChatGPT: <b>'+NAMES[c.b]+'</b> <span class="'+(bok?'ok':'no')+'">'+(bok?'✓':'✗')+'</span></span></div>'+
+    '<div class="row"><span>Best answer: <b>'+NAMES[c.l]+'</b></span></div>'+c.w+'<div style="margin-top:10px;color:var(--soft)">ChatGPT said: '+c.r+'</div>';
+  $('fb').classList.remove('hide');
+  $('next').textContent=idx===19?'See result':'Next case';
+  $('next').classList.remove('hide');
+  $('fb').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function finish(){
+  $('b').style.width='100%';
+  $('big').textContent=you+' / 20';
+  $('you').textContent=you;$('bot').textContent=bot;
+  var v;
+  if(you>bot)v='You beat ChatGPT on these 20 cases.';
+  else if(you===bot)v='A tie with ChatGPT. Check the cases you missed: they are often the borderline ones where protocols differ.';
+  else v='ChatGPT scored higher on these 20 cases. Check which ones you missed, since a few are borderline and protocols differ.';
+  $('verdict').textContent=v;
+  $('pat').innerHTML='Your misses: <b>'+missU.under+'</b> under-triaged, <b>'+missU.over+'</b> over-triaged.<br>ChatGPT misses: <b>'+missB.under+'</b> under-triaged, <b>'+missB.over+'</b> over-triaged.<br>Under-triage is the dangerous direction: a sick patient waits too long.';
+  show('end');
+}
+$('go').onclick=start;
+$('again').onclick=start;
+$('next').onclick=function(){idx++;if(idx>=20)finish();else render()};
+var ob=document.querySelectorAll('#opts button');
+for(var i=0;i<ob.length;i++){(function(b){b.onclick=function(){pick(+b.getAttribute('data-l'))}})(ob[i])}
+$('share').onclick=function(){
+  var t='I scored '+you+'/20 on the Nubicor triage challenge. ChatGPT scored '+bot+'/20 on the same cases. Can you beat it? @nubicor.ai';
+  var box=$('sharebox');
+  var done=function(){$('share').textContent='Copied!';setTimeout(function(){$('share').textContent='Copy my score'},1800)};
+  var manual=function(){box.value=t;box.classList.remove('hide');box.focus();box.select();try{box.setSelectionRange(0,t.length)}catch(e){}
+    $('share').textContent='Press and hold the text, then tap Copy'};
+  var legacy=function(){
+    try{box.value=t;box.classList.remove('hide');box.focus();box.select();box.setSelectionRange(0,t.length);
+      var ok=document.execCommand('copy');
+      if(ok){box.classList.add('hide');done()}else{manual()}
+    }catch(e){manual()}
+  };
+  try{
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done,legacy)}
+    else{legacy()}
+  }catch(e){legacy()}
+};
+</script>
+</body>
+</html>
